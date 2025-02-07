@@ -20,7 +20,7 @@ jobs:
           echo "Build success!" > output/build.log
 
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-logs
           path: output/build.log
