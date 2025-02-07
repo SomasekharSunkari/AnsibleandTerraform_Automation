@@ -26,6 +26,32 @@ jobs:
         with:
           name: build-logs
           path: output/build.log
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18  # Specify the required Node.js version
+          cache: 'npm'  # Enables caching for npm dependencies
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: path/to/dependencies
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+        
+      - uses: actions/cache/save@v4
+        id: cache1
+        with:
+          path: node_moduels/**
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
   test:
     runs-on: ubuntu-latest
