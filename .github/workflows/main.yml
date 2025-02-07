@@ -1,0 +1,35 @@
+on:
+  push:
+    branches:
+     - main 
+  pull_request:
+    branches:
+      - main
+     
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build Application
+        run: |
+          mkdir output
+          echo "Build success!" > output/build.log
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-logs
+          path: output/build.log
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-logs
